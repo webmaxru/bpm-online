@@ -1,5 +1,7 @@
 # [Realtime BPM Analyzer](https://github.com/dlepaux/realtime-bpm-analyzer) Example
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/dlepaux/realtime-bpm-analyzer-example.svg)](https://greenkeeper.io/)
+
 ## Installation
 
 Run `npm install` to install dependencies
