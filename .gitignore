@@ -1,0 +1,7 @@
+node_modules
+.tmp
+.DS_Store
+npm-debug*
+coverage
+.nyc*
+public/*
