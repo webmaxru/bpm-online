@@ -16,7 +16,7 @@
     "realtime-bpm-analyzer": "^1.0.5"
   },
   "devDependencies": {
-    "babel-brunch": "^6.1.1",
+    "babel-brunch": "^7.0.0",
     "clean-css-brunch": "^2.10.0",
     "connect": "^3.6.6",
     "css-brunch": "^2.10.0",
