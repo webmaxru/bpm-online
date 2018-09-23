@@ -72,13 +72,14 @@ const App = {
             numberOfInputChannels: 1,
             numberOfOutputChannels: 1
           },
-          minimimTimeToStabilize: 10000,
+          computeBPMDelay: 5000,
+          stabilizationTime: 10000,
           continuousAnalysis: true,
           pushTime: 1000,
           pushCallback: function(err, bpm, thresold) {
             if(bpm && bpm.length) {
               cacheBPM = bpm;
-              console.log('[pushCallback] ' + JSON.stringify(cacheBPM[0]) + ' ' + JSON.stringify(cacheBPM[1]) + ' thresold ' + thresold)
+              console.log('%c[pushCallback]' + JSON.stringify(cacheBPM[0]) + ' ' + JSON.stringify(cacheBPM[1]) + ' thresold ' + thresold, 'background: #eee')
 
             }
           },
@@ -102,6 +103,17 @@ const App = {
   init (choice) {
     // Create new instance of AudioContext
     this.context = new window.AudioContext() || window.webkitAudioContext();
+
+    // Create and update timer
+    const timer = document.getElementById('timer');
+    let date = Date.now();
+
+    if (timer) {
+      setInterval(() => {
+        let now = Date.now();
+        timer.innerHTML = ((now - date) / 1000).toFixed(1) + 's';
+      }, 1000);
+    }
 
     if (choice == 'userMedia') {
       return this.initUserMedia(this.context);

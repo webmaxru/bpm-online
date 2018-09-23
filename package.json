@@ -2,7 +2,7 @@
   "name": "realtime-bpm-analyzer-example",
   "version": "1.0.0",
   "description": "Boilerplate for realtime-bpm-analyzer",
-  "scripts ": {
+  "scripts": {
     "start": "brunch watch --server",
     "build": "brunch build --production",
     "server": "node server.js"
@@ -21,11 +21,11 @@
     "https": "^1.0.0"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.1.0",
     "babel-brunch": "^7.0.0",
     "clean-css-brunch": "^2.10.0",
     "css-brunch": "^2.10.0",
     "javascript-brunch": "^2.10.0",
-    "sass-brunch": "^2.10.4",
     "uglify-js-brunch": "^2.10.0"
   }
 }

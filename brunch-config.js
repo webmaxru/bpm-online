@@ -22,9 +22,6 @@ exports.config = {
     ]
   },
   plugins: {
-    babel: {
-      presets: ['env']
-    },
     cleancss: {
       keepSpecialComments: 0,
       removeEmpty: true
