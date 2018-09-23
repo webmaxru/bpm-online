@@ -13,11 +13,10 @@
   <h1>Realtime BPM/Tempo Analyzer</h1>
   <h3>Live Example</h3>
   <hr>
+  <audio src="media/new_order-blue_monday.mp3" id="track" controls autoplay></audio>
+  <p id="current-bpm"></p>
 
-  <ul>
-    <li><a href="./userMedia.html">Continuous analysis via microphone (userMedia)</a></li>
-    <li><a href="./audioNode.html">Analysis on one audio Node (audioNode)</a></li>
-  </ul>
 
+  <script>require('app').init('audioNode');</script>
 </body>
 </html>

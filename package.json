@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Boilerplate for realtime-bpm-analyzer",
   "scripts ": {
-    "start": "brunch build && node server.js"
+    "start": "brunch watch --server",
+    "build": "brunch build --production",
+    "server": "node server.js"
   },
   "repository ": {
     "type": "git",
@@ -12,7 +14,11 @@
   "author": "David Lepaux <d.lepaux@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "babel-preset-env": "^1.7.0",
+    "body-parser": "^1.18.3",
     "brunch": "^2.10.10",
+    "express": "^4.16.3",
+    "https": "^1.0.0",
     "realtime-bpm-analyzer": "^1.0.5"
   },
   "devDependencies": {

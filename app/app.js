@@ -1,21 +1,22 @@
 'use strict';
 
-const RealTimeBPMAnalyzer = require('realtime-bpm-analyzer');
+const RealTimeBPMAnalyzer = require('./components/realtime-bpm-analyzer/src/index.js');
+const utils = require('./components/realtime-bpm-analyzer/src/utils.js');
 
 const App = {
-  init() {
+  context: null,
 
-    // Create new instance of AudioContext
-    var AudioContext = window.AudioContext || window.webkitAudioContext;
-    var audioContext = new AudioContext();
+  initAudioNode(context) {
+
+
     // Set the source with the HTML Audio Node
-    var source = audioContext.createMediaElementSource(document.getElementById('track'));
+    var source = this.context.createMediaElementSource(document.getElementById('track'));
     // Set the scriptProcessorNode to get PCM data in real time
-    var scriptProcessorNode = audioContext.createScriptProcessor(4096, 1, 1);
+    var scriptProcessorNode = this.context.createScriptProcessor(4096, 1, 1);
     // Connect everythings together
-    scriptProcessorNode.connect(audioContext.destination);
+    scriptProcessorNode.connect(this.context.destination);
     source.connect(scriptProcessorNode);
-    source.connect(audioContext.destination);
+    source.connect(this.context.destination);
 
 
     // Insternciate RealTimeBPMAnalyzer
@@ -38,6 +39,81 @@ const App = {
     scriptProcessorNode.onaudioprocess = function (e) {
         onAudioProcess.analyze(e);
     };
+  },
+
+  initUserMedia(context) {
+
+    document.getElementById('start').addEventListener('click', () => {
+
+      console.log('[initUserMedia] function: started !');
+
+      // Get user media and enable microphone
+      navigator.getUserMedia = ( navigator.getUserMedia ||
+                                 navigator.webkitGetUserMedia ||
+                                 navigator.mozGetUserMedia ||
+                                 navigator.msGetUserMedia);
+      navigator.getUserMedia({audio: true}, onStream.bind(this), function() {});
+
+      let cacheBPM = null;
+
+      function onStream(stream) {
+        // Set the source with the HTML Audio Node
+        var input = this.context.createMediaStreamSource(stream);
+        // Set the scriptProcessorNode to get PCM data in real time
+        var scriptProcessorNode = this.context.createScriptProcessor(4096, 1, 1);
+
+        // Connect everythings together (do not connect input to this.context.destination to avoid sound looping)
+        scriptProcessorNode.connect(this.context.destination);
+        input.connect(scriptProcessorNode);
+
+        var onAudioProcess = new RealTimeBPMAnalyzer({
+          scriptNode: {
+            bufferSize: 4096,
+            numberOfInputChannels: 1,
+            numberOfOutputChannels: 1
+          },
+          minimimTimeToStabilize: 10000,
+          continuousAnalysis: true,
+          pushTime: 1000,
+          pushCallback: function(err, bpm, thresold) {
+            if(bpm && bpm.length) {
+              cacheBPM = bpm;
+              console.log('[pushCallback] ' + JSON.stringify(cacheBPM[0]) + ' ' + JSON.stringify(cacheBPM[1]) + ' thresold ' + thresold)
+
+            }
+          },
+          onBpmStabilized: (thresold) => {
+            onAudioProcess.clearValidPeaks(thresold);
+          }
+        });
+
+        // Attach realTime function to audioprocess event.inputBuffer (AudioBuffer)
+        scriptProcessorNode.onaudioprocess = function (e) {
+          onAudioProcess.analyze(e);
+        };
+      }
+    });
+
+    document.getElementById('stop').addEventListener('click', () => {
+      this.stop();
+    });
+  },
+
+  init (choice) {
+    // Create new instance of AudioContext
+    this.context = new window.AudioContext() || window.webkitAudioContext();
+
+    if (choice == 'userMedia') {
+      return this.initUserMedia(this.context);
+    } else if (choice == 'audioNode') {
+      return this.initAudioNode(this.context);
+    }
+  },
+
+  stop () {
+    this.context.resume().then(() => {
+      console.log('Playback resumed successfully');
+    });
   }
 }
 

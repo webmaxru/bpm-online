@@ -4,10 +4,16 @@
 
 ## Installation
 
-Run `npm install` to install dependencies
+- Run `npm install` to install dependencies
 
-Then `node start` and ready to go !
+- Execute `bash install.sh` in the root folder of this project
 
-Rendez-vous to your [localhost:8080](http://localhost:8080)
+- Then `node start` and ready to go !
 
-Enjoy
+Rendez-vous to your [localhost:3000](https://localhost:3000)
+
+## Develompment workflow
+
+Execute `bash install.sh` in the root folder of this project
+
+It will append the realtime-bpm-analyzer project in the app/components folder to edit it easily.
