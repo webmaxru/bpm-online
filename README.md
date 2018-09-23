@@ -4,6 +4,8 @@
 
 ## Installation
 
+- This project contain `node-sass` be sur to have the `node-gyp` [requirments](https://github.com/nodejs/node-gyp#on-windows)
+
 - Run `npm install` to install dependencies
 
 - Execute `bash install.sh` in the root folder of this project
