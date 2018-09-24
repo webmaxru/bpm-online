@@ -1,7 +1,7 @@
-# [Realtime BPM Analyzer](https://github.com/dlepaux/realtime-bpm-analyzer) Example
+# [Realtime BPM Analyzer](https://github.com/dlepaux/realtime-bpm-analyzer) Exemple
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/dlepaux/realtime-bpm-analyzer-example.svg)](https://greenkeeper.io/)
-[![Build Status](https://travis-ci.org/dlepaux/realtime-bpm-analyzer-example.svg?branch=master)](https://travis-ci.org/dlepaux/realtime-bpm-analyzer-example)
+[![Greenkeeper badge](https://badges.greenkeeper.io/dlepaux/realtime-bpm-analyzer-exemple.svg)](https://greenkeeper.io/)
+[![Build Status](https://travis-ci.org/dlepaux/realtime-bpm-analyzer-exemple.svg?branch=master)](https://travis-ci.org/dlepaux/realtime-bpm-analyzer-exemple)
 
 ## Installation
 
