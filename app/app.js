@@ -112,7 +112,7 @@ const App = {
       setInterval(() => {
         let now = Date.now();
         timer.innerHTML = ((now - date) / 1000).toFixed(1) + 's';
-      }, 1000);
+      }, 100);
     }
 
     if (choice == 'userMedia') {

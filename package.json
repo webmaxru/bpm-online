@@ -1,6 +1,6 @@
 {
   "name": "realtime-bpm-analyzer-example",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Boilerplate for realtime-bpm-analyzer",
   "scripts": {
     "start": "brunch watch --server",
