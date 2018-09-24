@@ -18,7 +18,8 @@
     "body-parser": "^1.18.3",
     "brunch": "^2.10.17",
     "express": "^4.16.3",
-    "https": "^1.0.0"
+    "https": "^1.0.0",
+    "node-sass": "^4.9.3"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.1.0",
