@@ -6,3 +6,4 @@ coverage
 .nyc*
 public/*
 app/components/
+yarn.lock

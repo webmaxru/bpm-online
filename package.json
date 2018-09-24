@@ -5,8 +5,7 @@
   "scripts": {
     "start": "brunch watch --server",
     "build": "brunch build --production",
-    "server": "node server.js",
-    "test": "npm test"
+    "server": "node server.js"
   },
   "repository ": {
     "type": "git",
