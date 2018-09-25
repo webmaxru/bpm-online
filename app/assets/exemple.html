@@ -1,4 +1,5 @@
-<canvas id="canvas" width="512" height="256" ></canvas>
+<canvas id="canvas1" width="512" height="256" ></canvas>
+<canvas id="canvas2" width="512" height="256" ></canvas>
 
 <p id="controls">
   <input type="button" id="start_button" value="Start">
@@ -9,7 +10,7 @@
 <!-- ----------------------------------------------------- -->
 
 <style>
-    #canvas {
+    #canvas1, #canvas2 {
         margin-left: auto;
         margin-right: auto;
         display: block;
@@ -43,35 +44,107 @@
         return  window.webkitAudioContext || window.AudioContext || window.mozAudioContext;
     })();
     // Global Variables for Audio
-    var audioContext;
-    var audioBuffer;
-    var sourceNode;
-    var analyserNode;
-    var javascriptNode;
-    var audioData = null;
-    var audioPlaying = false;
-    var sampleSize = 1024;  // number of samples to collect before analyzing data
-    var dataArray;     // array to hold time domain data
-    // This must be hosted on the same server as this page - otherwise you get a Cross Site Scripting error
-    var audioUrl = "/media/new_order-blue_monday.wav";
-    // Global Variables for the Graphics
-    var canvasWidth  = 512;
-    var canvasHeight = 256;
-    var ctx;
+    var audioContext = new AudioContext();
+    
     $(document).ready(function() {
-        ctx = $("#canvas").get()[0].getContext("2d");
-        // the AudioContext is the primary 'container' for all your audio node objects
-        try {
-            audioContext = new AudioContext();
-        } catch(e) {
-            alert('Web Audio API is not supported in this browser');
-        }
-        // When the Start button is clicked, finish setting up the audio nodes, play the sound,
-        // gather samples for the analysis, update the canvas
-        $("#start_button").on('click', function(e) {
-            e.preventDefault();
+
+    	var testNode = function (elementId, audioUrl) {
+        	var sourceNode;
+		    var analyserNode;
+		    var javascriptNode;
+		    var audioData = null;
+		    var audioPlaying = false;
+		    var sampleSize = 1024;  // number of samples to collect before analyzing data
+		    var dataArray;     // array to hold time domain data
+		    // Global Variables for the Graphics
+		    var canvasWidth  = 512;
+		    var canvasHeight = 256;
+		    var ctx = $("#" + elementId).get()[0].getContext("2d");
+
+        	// Play the audio and loop until stopped
+		    function playSound(buffer) {
+		        sourceNode.buffer = buffer;
+		        sourceNode.start(0);    // Play the sound now
+
+		        sourceNode.loop = true;
+		        audioPlaying = true;
+		    }
+
+	        // Load the audio from the URL via Ajax and store it in global variable audioData
+		    // Note that the audio load is asynchronous
+		    function loadSound(url) {
+		        var request = new XMLHttpRequest();
+		        request.open('GET', url, true);
+		        request.responseType = 'arraybuffer';
+		        // When loaded, decode the data and play the sound
+		        request.onload = function () {
+		            audioContext.decodeAudioData(request.response, function (buffer) {
+		                audioData = buffer;
+		                playSound(audioData);
+		            }, function (e) {
+				        console.log(e);
+				    });
+		        }
+		        request.send();
+		    }
+
+	        function drawTimeDomain() {
+			    function clearCanvas() {
+			        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+			    }
+		        clearCanvas();
+		        /*for (var i = 0; i < dataArray.length; i++) {
+		            var value = dataArray[i] / 256;
+		            var y = canvasHeight - (canvasHeight * value) - 1;
+		            ctx.fillStyle = '#ffffff';
+		            ctx.fillRect(i, y, 1, 1);
+		        }*/
+
+		        ctx.fillStyle = 'rgb(0, 0, 0)';
+		        ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+		        var barWidth = (canvasWidth / dataArray.length) * 2.5;
+				var barHeight;
+				var x = 0;
+
+		        for(var i = 0; i < dataArray.length; i++) {
+			        barHeight = dataArray[i] / 2;
+
+			        ctx.fillStyle = 'rgb(' + (barHeight+100) + ',50,50)';
+			        ctx.fillRect(x,canvasHeight-barHeight/2,barWidth,barHeight);
+
+			        x += barWidth + 1;
+			    }
+		    }
+
+		    
+
             // Set up the audio Analyser, the Source Buffer and javascriptNode
-            setupAudioNodes();
+            sourceNode     = audioContext.createBufferSource();
+	        analyserNode   = audioContext.createAnalyser();
+	        javascriptNode = audioContext.createScriptProcessor(sampleSize, 1, 1);
+	        // Create the array for the data values
+	        dataArray = new Uint8Array(analyserNode.frequencyBinCount);
+	        // Now connect the nodes together
+
+
+	        // add lowerPassFilter on the canvas2
+			if (elementId == 'canvas2') {
+				var filter = audioContext.createBiquadFilter();
+				filter.type = 'lowpass';
+				
+				sourceNode.connect(audioContext.destination);
+		        sourceNode.connect(filter);
+		        filter.connect(analyserNode);
+		        analyserNode.connect(javascriptNode);
+				javascriptNode.connect(audioContext.destination);
+			} else {
+				sourceNode.connect(audioContext.destination);
+		        sourceNode.connect(analyserNode);
+		        analyserNode.connect(javascriptNode);
+	        	javascriptNode.connect(audioContext.destination);
+			}
+
             // setup the event handler that is triggered every time enough samples have been collected
             // trigger the audio analysis and draw the results
             javascriptNode.onaudioprocess = function () {
@@ -88,77 +161,26 @@
             } else {
                 playSound(audioData);
             }
-        });
-        // Stop the audio playing
-        $("#stop_button").on('click', function(e) {
+
+	        // Stop the audio playing
+	        $("#stop_button").one('click', function(e) {
+	            e.preventDefault();
+	            sourceNode.stop(0);
+	            audioPlaying = false;
+	        });
+    	}
+
+        // the AudioContext is the primary 'container' for all your audio node objects
+        // gather samples for the analysis, update the canvas
+        $("#start_button").on('click', function(e) {
             e.preventDefault();
-            sourceNode.stop(0);
-            audioPlaying = false;
+
+            testNode('canvas1', "/media/new_order-blue_monday1.wav");
+            testNode('canvas2', "/media/new_order-blue_monday2.wav");
         });
     });
-    function setupAudioNodes() {
-        sourceNode     = audioContext.createBufferSource();
-        analyserNode   = audioContext.createAnalyser();
-        javascriptNode = audioContext.createScriptProcessor(sampleSize, 1, 1);
-        // Create the array for the data values
-        dataArray = new Uint8Array(analyserNode.frequencyBinCount);
-        // Now connect the nodes together
-        sourceNode.connect(audioContext.destination);
-        sourceNode.connect(analyserNode);
-        analyserNode.connect(javascriptNode);
-        javascriptNode.connect(audioContext.destination);
-    }
-    // Load the audio from the URL via Ajax and store it in global variable audioData
-    // Note that the audio load is asynchronous
-    function loadSound(url) {
-        var request = new XMLHttpRequest();
-        request.open('GET', url, true);
-        request.responseType = 'arraybuffer';
-        // When loaded, decode the data and play the sound
-        request.onload = function () {
-            audioContext.decodeAudioData(request.response, function (buffer) {
-                audioData = buffer;
-                playSound(audioData);
-            }, onError);
-        }
-        request.send();
-    }
-    // Play the audio and loop until stopped
-    function playSound(buffer) {
-        sourceNode.buffer = buffer;
-        sourceNode.start(0);    // Play the sound now
-        sourceNode.loop = true;
-        audioPlaying = true;
-    }
-    function onError(e) {
-        console.log(e);
-    }
-    function drawTimeDomain() {
-        clearCanvas();
-        /*for (var i = 0; i < dataArray.length; i++) {
-            var value = dataArray[i] / 256;
-            var y = canvasHeight - (canvasHeight * value) - 1;
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(i, y, 1, 1);
-        }*/
 
-        ctx.fillStyle = 'rgb(0, 0, 0)';
-        ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
-        var barWidth = (canvasWidth / dataArray.length) * 2.5;
-		var barHeight;
-		var x = 0;
 
-        for(var i = 0; i < dataArray.length; i++) {
-	        barHeight = dataArray[i] / 2;
 
-	        ctx.fillStyle = 'rgb(' + (barHeight+100) + ',50,50)';
-	        ctx.fillRect(x,canvasHeight-barHeight/2,barWidth,barHeight);
-
-	        x += barWidth + 1;
-	    }
-    }
-    function clearCanvas() {
-        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-    }
 </script>
