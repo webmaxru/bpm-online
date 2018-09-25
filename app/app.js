@@ -100,6 +100,69 @@ const App = {
     });
   },
 
+
+  initTest () {
+
+    // Hacks to deal with different function names in different browsers
+    window.requestAnimFrame = (function(){
+      return  window.requestAnimationFrame       ||
+              window.webkitRequestAnimationFrame ||
+              window.mozRequestAnimationFrame    ||
+              function(callback, element){
+                window.setTimeout(callback, 1000 / 60);
+              };
+    })();
+
+
+    const WIDTH = "400px";
+    const HEIGHT = "60px";
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    const test = (elementId) => {
+      var analyser = audioCtx.createAnalyser();
+      var source = audioCtx.createMediaElementSource(document.getElementById(elementId));
+      source.connect(analyser);
+      analyser.connect(audioCtx.destination);
+      analyser.fftSize = 256;
+      var bufferLength = analyser.frequencyBinCount;
+      console.log('bufferLength', bufferLength);
+      var dataArray = new Uint8Array(bufferLength);
+      var canevas = document.getElementById(elementId); // dans votre HTML, cet élément apparaît comme <canvas id="monCanevas"></canvas>
+      var canvasCtx = canevas.getContext('2d');
+      canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
+      function draw() {
+        var drawVisual = requestAnimationFrame(draw);
+
+        analyser.getByteFrequencyData(dataArray);
+
+        canvasCtx.fillStyle = 'rgb(0, 0, 0)';
+        canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
+
+        var barWidth = (WIDTH / bufferLength) * 2.5;
+        var barHeight;
+        var x = 0;
+
+        for(var i = 0; i < bufferLength; i++) {
+          barHeight = dataArray[i]/2;
+
+          canvasCtx.fillStyle = 'rgb(' + (barHeight+100) + ',50,50)';
+          canvasCtx.fillRect(x,HEIGHT-barHeight/2,barWidth,barHeight);
+
+          x += barWidth + 1;
+        }
+      };
+      draw();
+    }
+
+    test('canvas1');
+    test('canvas2');
+
+
+
+
+
+  },
+
   init (choice) {
     // Create new instance of AudioContext
     this.context = new window.AudioContext() || window.webkitAudioContext();
@@ -119,6 +182,8 @@ const App = {
       return this.initUserMedia(this.context);
     } else if (choice == 'audioNode') {
       return this.initAudioNode(this.context);
+    } else if (choice == 'test') {
+      return this.initTest(this.context);
     }
   },
 
