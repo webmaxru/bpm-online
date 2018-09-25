@@ -93,14 +93,15 @@
 			        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 			    }
 		        clearCanvas();
-		        /*for (var i = 0; i < dataArray.length; i++) {
+		        
+		        for (var i = 0; i < dataArray.length; i++) {
 		            var value = dataArray[i] / 256;
 		            var y = canvasHeight - (canvasHeight * value) - 1;
 		            ctx.fillStyle = '#ffffff';
 		            ctx.fillRect(i, y, 1, 1);
-		        }*/
+		        }
 
-		        ctx.fillStyle = 'rgb(0, 0, 0)';
+		        /*ctx.fillStyle = 'rgb(0, 0, 0)';
 		        ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
 		        var barWidth = (canvasWidth / dataArray.length) * 2.5;
@@ -114,7 +115,7 @@
 			        ctx.fillRect(x,canvasHeight-barHeight/2,barWidth,barHeight);
 
 			        x += barWidth + 1;
-			    }
+			    }*/
 		    }
 
 		    
@@ -132,7 +133,7 @@
 			if (elementId == 'canvas2') {
 				var filter = audioContext.createBiquadFilter();
 				filter.type = 'lowpass';
-				
+
 				sourceNode.connect(audioContext.destination);
 		        sourceNode.connect(filter);
 		        filter.connect(analyserNode);
@@ -149,7 +150,10 @@
             // trigger the audio analysis and draw the results
             javascriptNode.onaudioprocess = function () {
                 // get the Time Domain data for this sample
-                analyserNode.getByteFrequencyData(dataArray);
+                
+                analyserNode.getByteTimeDomainData(dataArray);
+                //analyserNode.getByteFrequencyData(dataArray);
+                
                 // draw the display if the audio is playing
                 if (audioPlaying == true) {
                     requestAnimFrame(drawTimeDomain);
