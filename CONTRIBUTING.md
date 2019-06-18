@@ -1,1 +1,1 @@
-Pull requests are welcome. If you add functionality, then please add unit tests to cover it.
+Pull requests are welcome (in the main repository). If you add functionality, then please add unit tests to cover it.

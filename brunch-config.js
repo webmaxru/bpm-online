@@ -1,5 +1,9 @@
 // See http://brunch.io for documentation.
 exports.config = {
+  server: {
+    port: 3000,
+    noCors: true
+  },
   paths: {
     public: './public',
     watched: ['app']
@@ -28,9 +32,11 @@ exports.config = {
     },
     sass: {
       mode: 'native',
-      debug: 'comments',
-      allowCache: true
-    }
+      // debug: 'comments',
+      options: {
+        includePaths: ['./node_modules/bootstrap/scss/'],
+        precision: 8
+      }
+    },
   }
 };
-

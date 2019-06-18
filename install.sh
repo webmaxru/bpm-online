@@ -1,1 +1,0 @@
-git clone git://github.com/dlepaux/realtime-bpm-analyzer.git app/components/realtime-bpm-analyzer

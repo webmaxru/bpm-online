@@ -5,5 +5,5 @@ npm-debug*
 coverage
 .nyc*
 public/*
-app/components/
 yarn.lock
+package-lock.json

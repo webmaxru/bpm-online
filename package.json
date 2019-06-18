@@ -5,7 +5,7 @@
   "scripts": {
     "start": "brunch watch --server",
     "build": "brunch build --production",
-    "server": "node server.js"
+    "preinstall": "git submodule init && git submodule update"
   },
   "repository ": {
     "type": "git",
@@ -16,6 +16,7 @@
   "dependencies": {
     "babel-preset-env": "^1.7.0",
     "body-parser": "^1.18.3",
+    "bootstrap": "^4.3.1",
     "brunch": "^2.10.17",
     "express": "^4.16.3",
     "https": "^1.0.0",

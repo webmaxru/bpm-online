@@ -7,8 +7,6 @@ const App = {
   context: null,
 
   initAudioNode(context) {
-
-
     // Set the source with the HTML Audio Node
     var source = this.context.createMediaElementSource(document.getElementById('track'));
     // Set the scriptProcessorNode to get PCM data in real time
@@ -156,11 +154,6 @@ const App = {
 
     test('canvas1');
     test('canvas2');
-
-
-
-
-
   },
 
   init (choice) {
