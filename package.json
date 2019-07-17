@@ -20,7 +20,9 @@
     "brunch": "^2.10.17",
     "express": "^4.16.3",
     "https": "^1.0.0",
-    "node-sass": "^4.9.3"
+    "jquery": "^3.4.1",
+    "node-sass": "^4.9.3",
+    "raf": "^3.4.1"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.1.0",
@@ -28,6 +30,7 @@
     "clean-css-brunch": "^2.10.0",
     "css-brunch": "^2.10.0",
     "javascript-brunch": "^2.10.0",
+    "sass-brunch": "^2.10.8",
     "uglify-js-brunch": "^2.10.0"
   }
 }

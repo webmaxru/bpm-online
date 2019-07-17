@@ -12,6 +12,8 @@
 
 - Run `npm run start` and rendez-vous to your [localhost:3000](http://localhost:3000)
 
+### Chrome http/https redirect
+https://www.anhsblog.com/make-chrome-stop-redirect-from-http-to-https/#.XS85pZMzZTY
 
 ## Develompment workflow
 

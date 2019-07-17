@@ -2,6 +2,11 @@
 
 const RealTimeBPMAnalyzer = require('./components/realtime-bpm-analyzer/src/index.js');
 const utils = require('./components/realtime-bpm-analyzer/src/utils.js');
+const $ = require('jquery');
+const requestAnimationFrame = require('raf');
+
+
+
 
 const App = {
   context: null,
@@ -99,6 +104,142 @@ const App = {
   },
 
 
+  initGraphic (audioContext) {
+    // Constants
+    const sampleSize   = 1024;  // number of samples to collect before analyzing data
+    const canvasWidth  = 512;
+    const canvasHeight = 256;
+
+    // Create canvasNodes
+    const canvas1 = $('<canvas/>');
+    canvas1.attr('id', 'canvas1');
+    canvas1.attr('width', '512px');
+    canvas1.attr('height', '256px');
+
+    const canvas2 = $('<canvas/>');
+    canvas2.attr('id', 'canvas2');
+    canvas2.attr('width', '512px');
+    canvas2.attr('height', '256px');
+
+    // Apend it to #root
+    $('#root').append(canvas1);
+    $('#root').append(canvas2);
+
+    var testNode = function (elementId, audioUrl) {
+      var sourceNode;
+      var analyserNode;
+      var javascriptNode;
+      var audioData = null;
+      var audioPlaying = false;
+      var dataArray; // array to hold time domain data
+      // Global Variables for the Graphics
+      var ctx = $("#" + elementId).get()[0].getContext("2d");
+
+      // Play the audio and loop until stopped
+      function playSound(buffer) {
+        sourceNode.buffer = buffer;
+        sourceNode.start(0); // Play the sound now
+        sourceNode.loop = true;
+        audioPlaying = true;
+      }
+
+      // Load the audio from the URL via Ajax and store it in global variable audioData
+      // Note that the audio load is asynchronous
+      function loadSound(url) {
+        var request = new XMLHttpRequest();
+        request.open('GET', url, true);
+        request.responseType = 'arraybuffer';
+        // When loaded, decode the data and play the sound
+        request.onload = function () {
+          audioContext.decodeAudioData(request.response, function (buffer) {
+            audioData = buffer;
+            playSound(audioData);
+          }, function (e) {
+            console.log(e);
+          });
+        }
+        request.send();
+      }
+
+      function drawTimeDomain() {
+        function clearCanvas() {
+          ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        }
+        clearCanvas();
+
+        ctx.font = "16px Courier New";
+        ctx.fillStyle = "white";
+        ctx.textAlign = "left";
+        ctx.fillText("Hello World", canvasWidth/2, canvasHeight/2);
+
+        for (var i = 0; i < dataArray.length; i++) {
+          var value = dataArray[i] / 256;
+          var y = canvasHeight - (canvasHeight * value) - 1;
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(i, y, 1, 1);
+        }
+      }
+
+      // Set up the audio Analyser, the Source Buffer and javascriptNode
+      sourceNode     = audioContext.createBufferSource();
+      analyserNode   = audioContext.createAnalyser();
+      javascriptNode = audioContext.createScriptProcessor(sampleSize, 1, 1);
+      // Create the array for the data values
+      dataArray = new Uint8Array(analyserNode.frequencyBinCount);
+      // Now connect the nodes together
+
+      // add lowerPassFilter on the canvas2
+      if (elementId == 'canvas2') {
+        var filter = audioContext.createBiquadFilter();
+        filter.type = 'lowpass';
+        sourceNode.connect(audioContext.destination);
+        sourceNode.connect(filter);
+        filter.connect(analyserNode);
+        analyserNode.connect(javascriptNode);
+        javascriptNode.connect(audioContext.destination);
+      } else {
+        sourceNode.connect(audioContext.destination);
+        sourceNode.connect(analyserNode);
+        analyserNode.connect(javascriptNode);
+        javascriptNode.connect(audioContext.destination);
+      }
+
+      // setup the event handler that is triggered every time enough samples have been collected
+      // trigger the audio analysis and draw the results
+      javascriptNode.onaudioprocess = function () {
+        // get the Time Domain data for this sample
+        analyserNode.getByteTimeDomainData(dataArray);
+        //analyserNode.getByteFrequencyData(dataArray);
+        // draw the display if the audio is playing
+        if (audioPlaying == true) {
+          requestAnimationFrame(drawTimeDomain);
+        }
+      }
+
+      // Load the Audio the first time through, otherwise play it from the buffer
+      if(audioData == null) {
+        loadSound(audioUrl);
+      } else {
+        playSound(audioData);
+      }
+
+      // Stop the audio playing
+      $('body').one('click', '#stop_button', function(e) {
+        e.preventDefault();
+        sourceNode.stop(0);
+        audioPlaying = false;
+      });
+    }
+
+    // the AudioContext is the primary 'container' for all your audio node objects
+    // gather samples for the analysis, update the canvas
+    $('body').one('click', '#start_button', function(e) {
+      e.preventDefault();
+      testNode('canvas1', "/media/new_order-blue_monday1.wav");
+      testNode('canvas2', "/media/new_order-blue_monday1.wav");
+    });
+  },
+
   initTest () {
 
     // Hacks to deal with different function names in different browsers
@@ -158,7 +299,7 @@ const App = {
 
   init (choice) {
     // Create new instance of AudioContext
-    this.context = new window.AudioContext() || window.webkitAudioContext();
+    this.context = new window.AudioContext() || window.mozAudioContext() || window.webkitAudioContext();
 
     // Create and update timer
     const timer = document.getElementById('timer');
@@ -175,6 +316,10 @@ const App = {
       return this.initUserMedia(this.context);
     } else if (choice == 'audioNode') {
       return this.initAudioNode(this.context);
+    } else if (choice == 'graphic') {
+      $(document).ready(() => {
+        return this.initGraphic(this.context);
+      });
     } else if (choice == 'test') {
       return this.initTest(this.context);
     }

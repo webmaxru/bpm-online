@@ -16,7 +16,7 @@ exports.config = {
     },
     stylesheets: {
       joinTo: {
-        '/css/master.css': /^(app)/
+        '/css/master.css': /^(app|node_modules)/
       }
     }
   },
