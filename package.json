@@ -5,7 +5,8 @@
   "scripts": {
     "start": "brunch watch --server",
     "build": "brunch build --production",
-    "preinstall": "git submodule init && git submodule update"
+    "preinstall": "git submodule init && git submodule update",
+    "test": "brunch build --production"
   },
   "repository ": {
     "type": "git",
