@@ -8,24 +8,33 @@
 </head>
 <body>
   <h1>Realtime BPM/Tempo Analyzer</h1>
-  <h3>Live Example</h3>
+  <h3>AudioNode Example</h3>
+  <p>
+    You can find the source code of this exemple in this location: <em>./realtime-bpm-analyzer-exemple/app/js/audioNode.js</em>
+  </p>
   <hr>
 
   <p>
     <strong>Please floow these instructions:</strong><br>
-    Press this button <button class="btn btn-sm btn-default" onclick="require('app').init('audioNode');">START</button> to begin the analysis<br>
-    Then play the audio node to get the BPM of this sample<br>
-    The expected BPM is around 131 BPM.
+    Press this <button class="btn btn-sm btn-primary" id="start">START</button> button to begin the analysis<br>
+    Then play the audio node with play control<br>
+    Get the BPM of this sample (expected BPM is around 131).
   </p>
 
   <hr>
 
   <audio src="/media/new_order-blue_monday2.wav" id="track" controls></audio>
 
-  <p id="timer"></p>
   <p id="current-bpm"></p>
 
   <br>
-  Have an issue ? Please report it with a maximum of details into <a href="https://github.com/dlepaux/realtime-bpm-analyzer/issues/new">the main repository</a>. Thank you <3
+
+  <p>
+    Have an issue ? Please report it with a maximum of details into <a href="https://github.com/dlepaux/realtime-bpm-analyzer/issues/new">the main repository</a>. Thank you <3
+  </p>
+
+  <script>
+    require('app').audioNode();
+  </script>
 </body>
 </html>

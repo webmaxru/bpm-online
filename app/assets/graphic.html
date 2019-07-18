@@ -11,12 +11,15 @@
   <h3>Graphic Example</h3>
   <hr>
 
-  <div id="root"></div>
+  <div id="root">
+    <canvas id="canvas1" height="256px"></canvas>
+    <canvas id="canvas2" height="256px"></canvas>
+  </div>
 
   <div id="controls">
-    <input type="button" id="start_button" value="Start">
+    <input class="btn btn-sm btn-primary" type="button" id="start" value="Start">
     &nbsp; &nbsp;
-    <input type="button" id="stop_button" value="Stop">
+    <input class="btn btn-sm btn-dark" type="button" id="stop" value="Stop">
   </div>
 
   <p>
@@ -24,7 +27,7 @@
   </p>
 
   <script>
-    require('app').init('graphic');
+    require('app').graphic();
   </script>
 </body>
 </html>

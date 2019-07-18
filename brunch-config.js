@@ -11,7 +11,7 @@ exports.config = {
   files: {
     javascripts: {
       joinTo: {
-        '/js/master.js': /^(app[\/\\]app\.js|app[\/\\]components[\/\\]realtime\-bpm\-analyzer[\/\\]src|node_modules)/
+        '/js/master.js': /^(app[\/\\]app\.js|app[\/\\]js|app[\/\\]components[\/\\]realtime\-bpm\-analyzer[\/\\]src|node_modules)/
       }
     },
     stylesheets: {
