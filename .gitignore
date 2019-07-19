@@ -6,4 +6,3 @@ coverage
 .nyc*
 public/*
 yarn.lock
-package-lock.json

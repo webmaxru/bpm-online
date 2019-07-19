@@ -5,12 +5,15 @@
 body {
   font-size: 14px;
 }
+#root {
+  width: 100%;
+}
 
 #canvas1, #canvas2 {
   margin-left: auto;
   margin-right: auto;
   display: block;
-  background-color: black;
+  background-color: #888;
 }
 #controls {
   text-align: center;

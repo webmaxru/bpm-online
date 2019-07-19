@@ -8,23 +8,42 @@
 </head>
 <body>
   <h1>Realtime BPM/Tempo Analyzer</h1>
-  <h3>Live Example</h3>
+  <h3>UserMedia (Microphone) Example</h3>
+    <p>
+    You can find the source code of this exemple in this location: <em>./realtime-bpm-analyzer-exemple/app/js/userMeia.js</em>
+  </p>
   <hr>
 
   <p>
-    Warning !<br><br>
-
-    If you have NOT the alert to authorize the access to your microphone, you have probably an issue with your material...<br>
-    On Windows envrionment Enable the <strong>stereoMix</strong> in your audio params to emulate the behaviour of a micro.
+    <strong>Warning !</strong><br>
+    If you have NOT the alert to authorize the access to your microphone, you have probably an issue with your material...<br><br>
+    On Windows envrionment Enable the <strong>stereoMix</strong> in your audio params to emulate the behaviour of a micro.<br>
+    On MacOS you can use <em>LoopBack</em> to put the output of Chrome on your micro input.
   </p>
 
-  <button id="start">Start</button>
-  <button id="stop">Mute</button>
-  <p id="timer"></p>
-  <p id="current-bpm"></p>
+  <hr>
+
+  <p>
+    Just press the Start button to analyze the input of microphone.<br>
+    <button class="btn btn-sm btn-primary" id="start">Start</button>
+    <button class="btn btn-sm btn-dark" id="stop">Mute</button>
+  </p>
+
+  <p>
+    More the thresold is high more the BPM is stable (in theory).<br>
+    <span id="current-thresold">Thresold: 0</span><br>
+    <span id="first-bpm">BPM: - (0)</span><br>
+    <span id="second-bpm">BPM: - (0)</span>
+  </p>
+
+  <hr>
+
+  <p>
+    Have an issue ? Please report it with a maximum of details into <a href="https://github.com/dlepaux/realtime-bpm-analyzer/issues/new">the main repository</a>. Thank you <3
+  </p>
 
   <script>
-    require('app').init('userMedia');
+    require('app').userMedia();
   </script>
 </body>
 </html>
