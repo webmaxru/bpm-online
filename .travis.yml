@@ -2,9 +2,5 @@ language: node_js
 node_js:
   - 'lts/*'
   - '10'
-  - '9'
-  - '8'
-  - '7'
-  - '6'
 after_success:
   - npm run build
