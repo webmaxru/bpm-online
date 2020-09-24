@@ -46,6 +46,7 @@ const start = () => {
      * Insternciate RealTimeBPMAnalyzer
      */
     const onAudioProcess = new RealTimeBPMAnalyzer({
+      debug: true,
       scriptNode: {
         bufferSize: 4096,
         numberOfInputChannels: 1,

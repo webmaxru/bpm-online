@@ -2,7 +2,8 @@
 exports.config = {
   server: {
     port: 3000,
-    noCors: true
+    noCors: true,
+    noPushState: true
   },
   paths: {
     public: './public',

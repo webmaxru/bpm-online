@@ -17,17 +17,17 @@
   "dependencies": {
     "babel-preset-env": "^1.7.0",
     "body-parser": "^1.18.3",
-    "bootstrap": "^4.3.1",
+    "bootstrap": "^4.5.2",
     "brunch": "^3.0.0",
     "express": "^4.16.3",
     "https": "^1.0.0",
-    "jquery": "^3.4.1",
-    "node-sass": "^4.9.3",
+    "jquery": "^3.5.1",
+    "node-sass": "^4.14.1",
     "popper.js": "^1.15.0",
     "raf": "^3.4.1"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-env": "^7.11.5",
     "babel-brunch": "^7.0.1",
     "clean-css-brunch": "^3.0.0",
     "css-brunch": "^2.10.0",
