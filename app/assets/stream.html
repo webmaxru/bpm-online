@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Realtime BPM/Tempo Analyzer</title>
+  <link rel="stylesheet" href="/css/master.css">
+  <script type="text/javascript" src="/js/master.js"></script>
+</head>
+<body>
+  <h1>Realtime BPM/Tempo Analyzer</h1>
+  <h3>From Stream</h3>
+
+  <p>
+    <strong>Please floow these instructions:</strong><br>
+    Press this <button class="btn btn-sm btn-primary" id="start">START</button> button to play the stream and begin the analysis<br>
+    <button class="btn btn-sm btn-dark" id="stop">Mute</button>
+  </p>
+
+  <hr>
+
+  <audio id="stream" crossOrigin="anonymous" controls></audio>
+
+  <p id="current-bpm"></p>
+
+  <br>
+
+  <p>
+    Have an issue ? Please report it with a maximum of details into <a href="https://github.com/dlepaux/realtime-bpm-analyzer/issues/new">the main repository</a>. Thank you <3
+  </p>
+
+  <script>
+    require('app').stream();
+  </script>
+</body>
+</html>
