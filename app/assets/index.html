@@ -10,9 +10,25 @@
   <script type="text/javascript" src="/js/master.js"></script>
 </head>
 <body>
-  <h1>Realtime BPM/Tempo Analyzer</h1>
-  <h3>Live Example</h3>
+
+  <p>
+    Just press the Start button to analyze the input of microphone.<br>
+    <button class="btn btn-sm btn-primary" id="start">Start</button>
+    <button class="btn btn-sm btn-dark" id="stop">Mute</button>
+  </p>
+
+  <p>
+    More the thresold is high more the BPM is stable (in theory).<br>
+    <span id="current-thresold">Thresold: 0</span><br>
+    <span id="first-bpm">BPM: - (0)</span><br>
+    <span id="second-bpm">BPM: - (0)</span>
+  </p>
+
   <hr>
+
+  <script>
+    require('app').userMedia();
+  </script>
 
   <ul>
     <li><a href="./audioNode.html">Analysis on one audio Node (audioNode)</a></li>

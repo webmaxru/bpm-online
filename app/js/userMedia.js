@@ -14,7 +14,8 @@ const start = () => {
     /**
      * Get AudioContext
      */
-    context = new window.AudioContext() || window.mozAudioContext() || window.webkitAudioContext();
+     window.AudioContext = window.AudioContext || window.mozAudioContext || window.webkitAudioContext
+      context = new window.AudioContext();
 
     const currentThresoldOutput = document.getElementById('current-thresold');
     const firstBPMOutput = document.getElementById('first-bpm');
