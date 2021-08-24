@@ -1,4 +1,4 @@
-import RealTimeBPMAnalyzer from './../components/realtime-bpm-analyzer/src/index.js';
+import RealTimeBPMAnalyzer from "./../components/realtime-bpm-analyzer/src/index.js";
 
 let context;
 let input;
@@ -9,17 +9,20 @@ const start = () => {
     /**
      * Disable buttun during the analysis
      */
-    e.currentTarget.setAttribute('disabled', 'disabled');
+    e.currentTarget.setAttribute("disabled", "disabled");
 
     /**
      * Get AudioContext
      */
-     window.AudioContext = window.AudioContext || window.mozAudioContext || window.webkitAudioContext
-      context = new window.AudioContext();
+    window.AudioContext =
+      window.AudioContext ||
+      window.mozAudioContext ||
+      window.webkitAudioContext;
+    context = new window.AudioContext();
 
-    const currentThresoldOutput = document.getElementById('current-thresold');
-    const firstBPMOutput = document.getElementById('first-bpm');
-    const secondBPMOutput = document.getElementById('second-bpm');
+    const currentThresoldOutput = document.getElementById("current-thresold");
+    const firstBPMOutput = document.getElementById("first-bpm");
+    const secondBPMOutput = document.getElementById("second-bpm");
 
     const onStream = (stream) => {
       /**
@@ -43,16 +46,16 @@ const start = () => {
         scriptNode: {
           bufferSize: 4096,
           numberOfInputChannels: 1,
-          numberOfOutputChannels: 1
+          numberOfOutputChannels: 1,
         },
         computeBPMDelay: 5000,
         stabilizationTime: 10000,
         continuousAnalysis: true,
         pushTime: 1000,
-        pushCallback: function(err, bpm, thresold) {
+        pushCallback: function (err, bpm, thresold) {
           if (err) throw err;
 
-          if(bpm && bpm.length) {
+          if (bpm && bpm.length) {
             currentThresoldOutput.innerHTML = `Thresold: ${thresold}`;
             firstBPMOutput.innerHTML = `BPM: ${bpm[0].tempo} (${bpm[0].count})`;
             secondBPMOutput.innerHTML = `BPM: ${bpm[1].tempo} (${bpm[1].count})`;
@@ -60,7 +63,7 @@ const start = () => {
         },
         onBpmStabilized: (thresold) => {
           onAudioProcess.clearValidPeaks(thresold);
-        }
+        },
       });
 
       /**
@@ -74,12 +77,30 @@ const start = () => {
     /**
      * Get user media and enable microphone
      */
-    navigator.getUserMedia = ( navigator.getUserMedia ||
-                               navigator.webkitGetUserMedia ||
-                               navigator.mozGetUserMedia ||
-                               navigator.msGetUserMedia);
-    navigator.getUserMedia({audio: true}, onStream.bind(this), function() {});
-  }
+
+    if (navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices
+        .getUserMedia({ audio: true })
+        .then((stream) => {
+          console.log(`mediaDevices`);
+          onStream(stream);
+        })
+        .catch((e) => {
+          console.log(e.name + ": " + e.message);
+        });
+    } else {
+      navigator.getUserMedia =
+        navigator.getUserMedia ||
+        navigator.webkitGetUserMedia ||
+        navigator.mozGetUserMedia ||
+        navigator.msGetUserMedia;
+      navigator.getUserMedia(
+        { audio: true },
+        onStream.bind(this),
+        function () {}
+      );
+    }
+  };
 };
 
 /**
@@ -93,12 +114,12 @@ const stop = () => {
       /**
        * Re-enable button
        */
-      document.getElementById('start').removeAttribute('disabled');
+      document.getElementById("start").removeAttribute("disabled");
     });
   };
 };
 
 export default () => {
-  document.getElementById('start').addEventListener('click', start());
-  document.getElementById('stop').addEventListener('click', stop());
+  document.getElementById("start").addEventListener("click", start());
+  document.getElementById("stop").addEventListener("click", stop());
 };
